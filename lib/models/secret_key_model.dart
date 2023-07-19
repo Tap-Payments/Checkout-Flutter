@@ -1,6 +1,6 @@
 class SecretKeyModel {
-  String? sandbox;
-  String? production;
+  String sandbox;
+  String production;
 
   SecretKeyModel({
     required this.sandbox,

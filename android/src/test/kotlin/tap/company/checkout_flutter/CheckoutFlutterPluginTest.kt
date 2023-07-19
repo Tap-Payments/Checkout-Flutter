@@ -1,4 +1,4 @@
-package com.example.checkout_flutter
+package tap.company.checkout_flutter
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
