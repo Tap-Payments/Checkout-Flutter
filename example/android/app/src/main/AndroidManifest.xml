@@ -1,7 +1,11 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
     <application
         android:label="checkout_flutter_example"
         android:name="${applicationName}"
+        tools:replace="android:name"
+        tools:node="replace"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -29,5 +33,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <activity android:name="company.tap.checkout.open.CheckOutActivity"  android:theme="@style/TransparentCompat"/>
     </application>
 </manifest>

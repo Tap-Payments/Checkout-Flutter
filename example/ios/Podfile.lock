@@ -1,0 +1,149 @@
+PODS:
+  - BugfenderSDK (1.11.0)
+  - checkout_flutter (0.0.1):
+    - CheckoutSDK-iOS (= 0.0.91)
+    - Flutter
+  - CheckoutSDK-iOS (0.0.91):
+    - BugfenderSDK (= 1.11.0)
+    - SwiftyRSA
+    - TapApplicationV2
+    - TapKeychain
+    - TapNetworkKit-iOS
+    - TapUIKit-iOS
+  - CommonDataModelsKit-iOS (1.0.134):
+    - SwiftyRSA
+    - TapAdditionsKitV2
+    - TapCardVlidatorKit-iOS
+    - TapKeychain
+  - EasyTipView (2.1.0)
+  - Flutter (1.0.0)
+  - integration_test (0.0.1):
+    - Flutter
+  - LocalisationManagerKit-iOS (1.0.5)
+  - McPicker (3.0.0)
+  - Nuke (10.7.1)
+  - PullUpController (0.8.0)
+  - SnapKit (5.6.0)
+  - SwiftyRSA (1.7.0):
+    - SwiftyRSA/ObjC (= 1.7.0)
+  - SwiftyRSA/ObjC (1.7.0)
+  - TapAdditionsKitV2 (0.0.9):
+    - TapSwiftFixesV2
+  - TapApplePayKit-iOS (1.0.18):
+    - CommonDataModelsKit-iOS
+    - TapApplicationV2
+    - TapNetworkKit-iOS
+  - TapApplicationV2 (0.0.2):
+    - TapAdditionsKitV2
+  - TapCardInputKit-iOS (1.0.66):
+    - CommonDataModelsKit-iOS
+    - LocalisationManagerKit-iOS
+    - Nuke
+    - SnapKit
+    - TapCardVlidatorKit-iOS
+    - TapThemeManager2020
+  - TapCardScanner-iOS (1.0.25):
+    - CommonDataModelsKit-iOS
+    - TapCardVlidatorKit-iOS
+  - TapCardVlidatorKit-iOS (1.0.20)
+  - TapFontKit-iOS (0.0.9):
+    - TapSwiftFixesV2
+  - TapKeychain (1.0.5)
+  - TapNetworkKit-iOS (1.0.14):
+    - CommonDataModelsKit-iOS
+    - SwiftyRSA
+    - TapAdditionsKitV2
+    - TapApplicationV2
+    - TapCardVlidatorKit-iOS
+  - TapSwiftFixesV2 (1.0.0):
+    - TapSwiftFixesV2/CoreGraphics (= 1.0.0)
+    - TapSwiftFixesV2/Exceptions (= 1.0.0)
+    - TapSwiftFixesV2/Threading (= 1.0.0)
+  - TapSwiftFixesV2/CoreGraphics (1.0.0)
+  - TapSwiftFixesV2/Exceptions (1.0.0)
+  - TapSwiftFixesV2/Threading (1.0.0)
+  - TapThemeManager2020 (1.0.89):
+    - LocalisationManagerKit-iOS
+    - TapFontKit-iOS
+  - TapUIKit-iOS (1.0.164):
+    - CommonDataModelsKit-iOS
+    - EasyTipView
+    - LocalisationManagerKit-iOS
+    - McPicker
+    - Nuke
+    - PullUpController
+    - SnapKit
+    - TapApplePayKit-iOS
+    - TapCardInputKit-iOS
+    - TapCardScanner-iOS
+    - TapCardVlidatorKit-iOS
+    - TapThemeManager2020
+
+DEPENDENCIES:
+  - checkout_flutter (from `.symlinks/plugins/checkout_flutter/ios`)
+  - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+
+SPEC REPOS:
+  trunk:
+    - BugfenderSDK
+    - CheckoutSDK-iOS
+    - CommonDataModelsKit-iOS
+    - EasyTipView
+    - LocalisationManagerKit-iOS
+    - McPicker
+    - Nuke
+    - PullUpController
+    - SnapKit
+    - SwiftyRSA
+    - TapAdditionsKitV2
+    - TapApplePayKit-iOS
+    - TapApplicationV2
+    - TapCardInputKit-iOS
+    - TapCardScanner-iOS
+    - TapCardVlidatorKit-iOS
+    - TapFontKit-iOS
+    - TapKeychain
+    - TapNetworkKit-iOS
+    - TapSwiftFixesV2
+    - TapThemeManager2020
+    - TapUIKit-iOS
+
+EXTERNAL SOURCES:
+  checkout_flutter:
+    :path: ".symlinks/plugins/checkout_flutter/ios"
+  Flutter:
+    :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+
+SPEC CHECKSUMS:
+  BugfenderSDK: b31a017a6a6ee3e2e834ae36148e9b70fb33c20f
+  checkout_flutter: f413937d99ef465c0d0961f68a347fcf1fb24b1a
+  CheckoutSDK-iOS: 5e59bb78b2861c0d49cfee1f76972a9a35aff250
+  CommonDataModelsKit-iOS: e7d8862a666ef0649952105e78cbed864f631428
+  EasyTipView: a92b6edc377b81c5ac18e9fd35d5ee78e9409488
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  integration_test: 13825b8a9334a850581300559b8839134b124670
+  LocalisationManagerKit-iOS: 4c140a36e66d34af69424a311659df3bd6cc793a
+  McPicker: ba38be56a8194faa5249eca4226c364eed628044
+  Nuke: 279f17a599fd1c83cf51de5e0e1f2db143a287b0
+  PullUpController: 2f7ccaa0f35b31b47e3efbe1854c7f781552b3c7
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  SwiftyRSA: 8c6dd1ea7db1b8dc4fb517a202f88bb1354bc2c6
+  TapAdditionsKitV2: 9846381c32b150303cbeff355550d3500a98f77d
+  TapApplePayKit-iOS: 77c154c075b631714b95eff63a49ae277c772926
+  TapApplicationV2: aee3d046c4272778431e1535de6cab34e1269f8c
+  TapCardInputKit-iOS: 2ce88eb653e6fbe817945c9cfe9961eb295289e4
+  TapCardScanner-iOS: 9db044847348ddb7a3b4ca262b33842e83d71a6e
+  TapCardVlidatorKit-iOS: 00ac65c44019f955234640e5d4ca583f639edca2
+  TapFontKit-iOS: 51ed2ddbe9f2b5ece1cc587ed45af9147e5c6fc1
+  TapKeychain: 143aa70bb2d1b094e0298e944660264034c79849
+  TapNetworkKit-iOS: 92c8c7feae384dc2595f8f270853ee3cf8ea3380
+  TapSwiftFixesV2: a8623a7273c6790b9754ec7e272e96fce7d3a800
+  TapThemeManager2020: 1707df16d6ba86074edd0387c63aab7e21c0b70f
+  TapUIKit-iOS: 4ac7ae16c52cbaa8401740781833856470f526a0
+
+PODFILE CHECKSUM: a57f30d18f102dd3ce366b1d62a55ecbef2158e5
+
+COCOAPODS: 1.12.1

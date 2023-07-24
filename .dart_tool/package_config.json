@@ -93,9 +93,9 @@
     },
     {
       "name": "plugin_platform_interface",
-      "rootUri": "file:///Users/muhammadazharmaqbool/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.4",
+      "rootUri": "file:///Users/muhammadazharmaqbool/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.5",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.18"
     },
     {
       "name": "sky_engine",
@@ -152,7 +152,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-07-17T17:14:57.231576Z",
+  "generated": "2023-07-24T12:34:46.204776Z",
   "generator": "pub",
-  "generatorVersion": "3.0.5"
+  "generatorVersion": "3.0.6"
 }

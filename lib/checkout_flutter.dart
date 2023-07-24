@@ -1,6 +1,9 @@
-import 'package:checkout_flutter/models/models.dart';
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+
+import 'models/models.dart';
 
 class CheckoutFlutter {
   static final Map<dynamic, dynamic> _tapCheckoutSDKResult =
@@ -11,7 +14,12 @@ class CheckoutFlutter {
   static Future<dynamic> get startCheckoutSDK async {
     //  if (!_validateAppConfig()) return _tapCheckoutSDKResult;
 
-    dynamic result = await _channel.invokeMethod('start', sdkConfigurations);
+    dynamic result = await _channel
+        .invokeMethod('start', {"configuration": sdkConfigurations});
+    if (kDebugMode) {
+      print("Configuration =>$sdkConfigurations");
+    }
+
     if (kDebugMode) {
       print("Result >>>>>> $result");
     }
@@ -19,13 +27,13 @@ class CheckoutFlutter {
   }
 
   static Map<String, dynamic> sdkConfigurations = {};
-  static Map<String, dynamic> sessionParameters = {};
 
   /// App configurations
   static void startPayment({
-    required SecretKeyModel secretKeyModel,
     required TapCustomerModel tapCustomer,
     required String bundleID,
+    required String sandboxKey,
+    required String productionKey,
     required Map<String, dynamic> metadata,
     List<ItemModel>? items,
     List<DestinationModel>? destinations,
@@ -38,17 +46,17 @@ class CheckoutFlutter {
     bool shouldFlipCardData = true,
     FlippingStatus? flippingStatus,
     bool displayColoredDark = false,
-    TapCurrencyCode currencyCode = TapCurrencyCode.USD,
+    TapCurrencyCode? currencyCode,
     List<String>? supportedCurrencies,
     double amount = 1.0,
     String? applePayMerchantID,
     bool swipeDownToDismiss = false,
-    PaymentType paymentType = PaymentType.All,
-    CloseButtonStyle closeButtonStyle = CloseButtonStyle.Title,
+    PaymentType? paymentType,
+    CloseButtonStyle? closeButtonStyle,
     bool showDragHandler = false,
-    TransactionModeType transactionMode = TransactionModeType.PURCHASE,
+    TransactionModeType? transactionMode,
     String tapMerchantID = "",
-    AllowedCardType allowedCardType = AllowedCardType.ALL,
+    AllowedCardType? allowedCardType,
     String postURL = "",
     String paymentDescription = "",
     String paymentStatementDescriptor = "",
@@ -56,84 +64,70 @@ class CheckoutFlutter {
     bool allowsToSaveSameCardMoreThanOnce = true,
     bool enableSaveCard = true,
     bool isSaveCardSwitchOnByDefault = true,
-    SDKMode sdkMode = SDKMode.Sandbox,
+    SDKMode? sdkMode,
     bool collectCreditCardName = false,
     bool creditCardNameEditable = true,
     String creditCardNamePreload = "",
-    ShowSaveCreditCard showSaveCreditCard = ShowSaveCreditCard.None,
+    ShowSaveCreditCard? showSaveCreditCard,
     bool isSubscription = false,
     bool recurringPaymentRequest = false,
-    ApplePayButtonType applePayButtonType = ApplePayButtonType.AppleLogoOnly,
-    ApplePayButtonStyle applePayButtonStyle = ApplePayButtonStyle.Black,
-    TapLoggingType tapLoggingType = TapLoggingType.CONSOLE,
+    ApplePayButtonType? applePayButtonType,
+    ApplePayButtonStyle? applePayButtonStyle,
+    TapLoggingType? tapLoggingType,
   }) {
     sdkConfigurations = <String, dynamic>{
-      "secretKey": secretKeyModel,
+      "sandbox": sandboxKey,
+      "production": productionKey,
       "bundleID": bundleID,
       "localeIdentifier": locale,
       "flippingStatus":
-          flippingStatus ?? FlippingStatus.FlipOnLoadWithFlippingBack,
+          flippingStatus ?? FlippingStatus.FlipOnLoadWithFlippingBack.name,
       "displayColoredDark": displayColoredDark,
-      "currency": currencyCode,
+      "currency": currencyCode ?? TapCurrencyCode.KWD.name,
       "supportedCurrencies": supportedCurrencies ?? [],
       "amount": amount,
       "items": items ?? [],
       "applePayMerchantID": applePayMerchantID ?? "merchant.tap.gosell",
       "swipeDownToDismiss": swipeDownToDismiss,
-      "paymentType": paymentType,
-      "closeButtonStyle": closeButtonStyle,
+      "paymentType": paymentType ?? PaymentType.All.name.toString(),
+      "closeButtonStyle":
+          closeButtonStyle ?? CloseButtonStyle.Title.name.toString(),
       "showDragHandler": showDragHandler,
-      "transactionMode": transactionMode,
-      "customer": tapCustomer,
-      "destinations": destinations ?? [],
+      "transactionMode":
+          transactionMode ?? TransactionModeType.PURCHASE.name.toString(),
+      "customer": jsonEncode(tapCustomer),
+      "destinations": destinations == null ? [] : jsonEncode(destinations),
       "tapMerchantID": tapMerchantID,
-      "enableApiLogging": [tapLoggingType],
-      "taxes": taxes ?? [],
-      "shipping": shipping ??
-          ShippingModel(
-            currency: TapCurrencyCode.USD,
-            amount: 1.0,
-            name: "",
-          ),
-      "allowedCardTypes": [allowedCardType],
+      "enableApiLogging":
+          tapLoggingType ?? [TapLoggingType.CONSOLE.name.toString()],
+      "taxes": taxes == null ? [] : jsonEncode(taxes),
+      "shipping": shipping == null ? null : jsonEncode(shipping),
+      "allowedCardTypes":
+          allowedCardType ?? [AllowedCardType.ALL.name.toString()],
       "postURL": postURL,
       "paymentDescription": paymentDescription,
       "paymentMetadata": metadata,
-      "paymentReference": reference ??
-          ReferenceModel(
-            acquirer: "",
-            gatewayReference: "",
-            gosellID: "",
-            orderNumber: "",
-            paymentReference: "",
-            trackingNumber: "",
-            transactionNumber: "",
-          ),
+      "paymentReference": reference == null ? null : jsonEncode(reference),
       "paymentStatementDescriptor": paymentStatementDescriptor,
       "require3DSecure": require3DSecure,
-      "receiptSettings": receipt ??
-          ReceiptModel(
-            email: true,
-            sms: true,
-            identifier: "",
-          ),
-      "authorizeAction": authorizeAction ??
-          AuthorizeActionModel(
-            type: AuthorizeActionType.Void,
-            timeInHours: 168,
-          ),
+      "receiptSettings": receipt == null ? null : jsonEncode(receipt),
+      "authorizeAction":
+          authorizeAction == null ? null : jsonEncode(authorizeAction),
       "allowsToSaveSameCardMoreThanOnce": allowsToSaveSameCardMoreThanOnce,
       "enableSaveCard": enableSaveCard,
       "isSaveCardSwitchOnByDefault": isSaveCardSwitchOnByDefault,
-      "sdkMode": sdkMode,
+      "sdkMode": sdkMode ?? SDKMode.Sandbox.name.toString(),
       "collectCreditCardName": collectCreditCardName,
       "creditCardNameEditable": creditCardNameEditable,
       "creditCardNamePreload": creditCardNamePreload,
-      "showSaveCreditCard": showSaveCreditCard,
+      "showSaveCreditCard":
+          showSaveCreditCard ?? ShowSaveCreditCard.None.name.toString(),
       "isSubscription": isSubscription,
       "recurringPaymentRequest": recurringPaymentRequest,
-      "applePayButtonType": applePayButtonType,
-      "applePayButtonStyle": applePayButtonStyle,
+      "applePayButtonType": applePayButtonType ??
+          ApplePayButtonType.AppleLogoOnly.name.toString(),
+      "applePayButtonStyle":
+          applePayButtonStyle ?? ApplePayButtonStyle.Black.name.toString(),
       "shouldFlipCardData": shouldFlipCardData,
     };
   }

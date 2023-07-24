@@ -7,7 +7,6 @@ export 'enums/enums.dart';
 export 'item_model.dart';
 export 'receipt_model.dart';
 export 'reference_model.dart';
-export 'secret_key_model.dart';
 export 'shipping_model.dart';
 export 'shipping_provider_model.dart';
 export 'tap_customer_model.dart';

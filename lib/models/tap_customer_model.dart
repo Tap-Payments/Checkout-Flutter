@@ -53,6 +53,10 @@ class TapCustomerModel {
       data['email'] = emailAddress!.toJson();
     }
 
+    if (address != null) {
+      data['address'] = address!.toJson();
+    }
+
     return data;
   }
 }

@@ -35,11 +35,10 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> sessionConfigurations() async {
     try {
+      print("Flipping status>>>${FlippingStatus.NoFlipping.name}");
       CheckoutFlutter.startPayment(
-        secretKeyModel: SecretKeyModel(
-          sandbox: "pk_test_YhUjg9PNT8oDlKJ1aE2fMRz7",
-          production: "sk_live_V4UDhitI0r7sFwHCfNB6xMKp",
-        ),
+        sandboxKey: "pk_test_YhUjg9PNT8oDlKJ1aE2fMRz7",
+        productionKey: "sk_live_V4UDhitI0r7sFwHCfNB6xMKp",
         tapCustomer: TapCustomerModel(
           firstName: "Muhammad",
           middleName: "Azhar",
@@ -47,15 +46,40 @@ class _MyAppState extends State<MyApp> {
           descriptionText: "",
           title: "",
           nationality: "",
-          identifier: "",
+          identifier: "cus_TS012520211349Za012907577",
           locale: "",
           phoneNumber: TapPhoneModel(
             isdNumber: "+92",
             phoneNumber: "3015082929",
           ),
-          address: null,
-          currency: null,
-          emailAddress: null,
+          address: AddressModel(
+            type: AddressType.Residential,
+            country: CountryModel(
+              isoCode: "92",
+            ),
+            line1: null,
+            line2: null,
+            line3: null,
+            line4: null,
+            city: null,
+            state: null,
+            zipCode: null,
+            apartment: null,
+            area: null,
+            avenue: null,
+            block: null,
+            buildingHouse: null,
+            postalBox: null,
+            postalCode: null,
+            office: null,
+            street: null,
+            floor: null,
+            countryGovernorate: null,
+          ),
+          // currency: TapCurrencyCode.USD,
+          emailAddress: TapEmailAddressModel(
+            value: "a.maqbool@tap.company",
+          ),
           metadata: {},
         ),
         bundleID: "tap.CheckoutSDK-iOS",
@@ -72,36 +96,37 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> startSDK() async {
+    print("Clicked");
     var tapSDKResult = await CheckoutFlutter.startCheckoutSDK;
 
-    print('>>>> ${tapSDKResult['sdk_result']}');
-
-    setState(() {
-      switch (tapSDKResult['sdk_result']) {
-        case "SUCCESS":
-          sdkStatus = "SUCCESS";
-          handleSDKResult();
-          break;
-        case "FAILED":
-          sdkStatus = "FAILED";
-          handleSDKResult();
-          break;
-        case "SDK_ERROR":
-          print('sdk error............');
-          print(tapSDKResult['sdk_error_code']);
-          print(tapSDKResult['sdk_error_message']);
-          print(tapSDKResult['sdk_error_description']);
-          print('sdk error............');
-          sdkErrorCode = tapSDKResult['sdk_error_code'].toString();
-          sdkErrorMessage = tapSDKResult['sdk_error_message'];
-          sdkErrorDescription = tapSDKResult['sdk_error_description'];
-          break;
-
-        case "NOT_IMPLEMENTED":
-          sdkStatus = "NOT_IMPLEMENTED";
-          break;
-      }
-    });
+    // print('>>>> ${tapSDKResult['sdk_result']}');
+    //
+    // setState(() {
+    //   switch (tapSDKResult['sdk_result']) {
+    //     case "SUCCESS":
+    //       sdkStatus = "SUCCESS";
+    //       handleSDKResult();
+    //       break;
+    //     case "FAILED":
+    //       sdkStatus = "FAILED";
+    //       handleSDKResult();
+    //       break;
+    //     case "SDK_ERROR":
+    //       print('sdk error............');
+    //       print(tapSDKResult['sdk_error_code']);
+    //       print(tapSDKResult['sdk_error_message']);
+    //       print(tapSDKResult['sdk_error_description']);
+    //       print('sdk error............');
+    //       sdkErrorCode = tapSDKResult['sdk_error_code'].toString();
+    //       sdkErrorMessage = tapSDKResult['sdk_error_message'];
+    //       sdkErrorDescription = tapSDKResult['sdk_error_description'];
+    //       break;
+    //
+    //     case "NOT_IMPLEMENTED":
+    //       sdkStatus = "NOT_IMPLEMENTED";
+    //       break;
+    //   }
+    // });
   }
 
   void handleSDKResult() {

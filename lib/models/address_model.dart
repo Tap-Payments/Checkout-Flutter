@@ -51,10 +51,10 @@ class AddressModel {
 
     switch (type) {
       case AddressType.Residential:
-        data['RESIDENTIAL'] = "RESIDENTIAL";
+        data['type'] = "RESIDENTIAL";
         break;
       case AddressType.Commercial:
-        data['COMMERCIAL'] = "COMMERCIAL";
+        data['type'] = "COMMERCIAL";
         break;
       default:
     }

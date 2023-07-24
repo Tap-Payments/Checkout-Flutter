@@ -24,6 +24,6 @@ void main() {
     MockCheckoutFlutterPlatform fakePlatform = MockCheckoutFlutterPlatform();
     CheckoutFlutterPlatform.instance = fakePlatform;
 
-    //  expect(await checkoutFlutterPlugin.getPlatformVersion(), '42');
+    // expect(await checkoutFlutterPlugin.getPlatformVersion(), '42');
   });
 }
