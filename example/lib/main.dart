@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:checkout_flutter/checkout_flutter.dart';
 import 'package:checkout_flutter/models/models.dart';
+import 'package:checkout_flutter_example/tap_loader/awesome_loader.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,15 +19,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final String _platformVersion = 'Unknown';
-  final _checkoutFlutterPlugin = CheckoutFlutter();
-
   Map<dynamic, dynamic>? tapSDKResult;
   String responseID = "";
   String sdkStatus = "";
   String sdkErrorCode = "";
   String sdkErrorMessage = "";
   String sdkErrorDescription = "";
+  AwesomeLoaderController loaderController = AwesomeLoaderController();
 
   @override
   void initState() {
@@ -35,7 +35,6 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> sessionConfigurations() async {
     try {
-      print("Flipping status>>>${FlippingStatus.NoFlipping.name}");
       CheckoutFlutter.startPayment(
         sandboxKey: "pk_test_YhUjg9PNT8oDlKJ1aE2fMRz7",
         productionKey: "sk_live_V4UDhitI0r7sFwHCfNB6xMKp",
@@ -96,41 +95,50 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> startSDK() async {
-    print("Clicked");
+    setState(() {
+      loaderController.start();
+    });
+
     var tapSDKResult = await CheckoutFlutter.startCheckoutSDK;
 
-    // print('>>>> ${tapSDKResult['sdk_result']}');
-    //
-    // setState(() {
-    //   switch (tapSDKResult['sdk_result']) {
-    //     case "SUCCESS":
-    //       sdkStatus = "SUCCESS";
-    //       handleSDKResult();
-    //       break;
-    //     case "FAILED":
-    //       sdkStatus = "FAILED";
-    //       handleSDKResult();
-    //       break;
-    //     case "SDK_ERROR":
-    //       print('sdk error............');
-    //       print(tapSDKResult['sdk_error_code']);
-    //       print(tapSDKResult['sdk_error_message']);
-    //       print(tapSDKResult['sdk_error_description']);
-    //       print('sdk error............');
-    //       sdkErrorCode = tapSDKResult['sdk_error_code'].toString();
-    //       sdkErrorMessage = tapSDKResult['sdk_error_message'];
-    //       sdkErrorDescription = tapSDKResult['sdk_error_description'];
-    //       break;
-    //
-    //     case "NOT_IMPLEMENTED":
-    //       sdkStatus = "NOT_IMPLEMENTED";
-    //       break;
-    //   }
-    // });
+    if (kDebugMode) {
+      print('SDK RESULT>>>> ${tapSDKResult['sdk_result']}');
+    }
+    loaderController.stopWhenFull();
+    setState(() {
+      switch (tapSDKResult['sdk_result']) {
+        case "SUCCESS":
+          sdkStatus = "SUCCESS";
+          handleSDKResult();
+          break;
+        case "FAILED":
+          sdkStatus = "FAILED";
+          handleSDKResult();
+          break;
+        case "SDK_ERROR":
+          if (kDebugMode) {
+            print('sdk error............');
+            print(tapSDKResult['sdk_error_code']);
+            print(tapSDKResult['sdk_error_message']);
+            print(tapSDKResult['sdk_error_description']);
+            print('sdk error............');
+          }
+          sdkErrorCode = tapSDKResult['sdk_error_code'].toString();
+          sdkErrorMessage = tapSDKResult['sdk_error_message'];
+          sdkErrorDescription = tapSDKResult['sdk_error_description'];
+          break;
+
+        case "NOT_IMPLEMENTED":
+          sdkStatus = "NOT_IMPLEMENTED";
+          break;
+      }
+    });
   }
 
   void handleSDKResult() {
-    print('>>>> ${tapSDKResult!['trx_mode']}');
+    if (kDebugMode) {
+      print('>>>> ${tapSDKResult!['trx_mode']}');
+    }
 
     switch (tapSDKResult!['trx_mode']) {
       case "CHARGE":
@@ -146,46 +154,59 @@ class _MyAppState extends State<MyApp> {
         break;
 
       case "TOKENIZE":
-        print('TOKENIZE token : ${tapSDKResult!['token']}');
-        print('TOKENIZE token_currency  : ${tapSDKResult!['token_currency']}');
-        print('TOKENIZE card_first_six : ${tapSDKResult!['card_first_six']}');
-        print('TOKENIZE card_last_four : ${tapSDKResult!['card_last_four']}');
-        print('TOKENIZE card_object  : ${tapSDKResult!['card_object']}');
-        print('TOKENIZE card_exp_month : ${tapSDKResult!['card_exp_month']}');
-        print('TOKENIZE card_exp_year    : ${tapSDKResult!['card_exp_year']}');
+        if (kDebugMode) {
+          print('TOKENIZE token : ${tapSDKResult!['token']}');
+          print(
+              'TOKENIZE token_currency  : ${tapSDKResult!['token_currency']}');
+          print('TOKENIZE card_first_six : ${tapSDKResult!['card_first_six']}');
+          print('TOKENIZE card_last_four : ${tapSDKResult!['card_last_four']}');
+          print('TOKENIZE card_object  : ${tapSDKResult!['card_object']}');
+          print('TOKENIZE card_exp_month : ${tapSDKResult!['card_exp_month']}');
+          print(
+              'TOKENIZE card_exp_year    : ${tapSDKResult!['card_exp_year']}');
+        }
 
         responseID = tapSDKResult!['token'];
         break;
     }
   }
 
-  void printSDKResult(String trx_mode) {
-    print('$trx_mode status                : ${tapSDKResult!['status']}');
-    if (trx_mode == "Authorize") {
-      print('$trx_mode id              : ${tapSDKResult!['authorize_id']}');
-    } else {
-      print('$trx_mode id               : ${tapSDKResult!['charge_id']}');
+  void printSDKResult(String trxMode) {
+    if (kDebugMode) {
+      print('$trxMode status                : ${tapSDKResult!['status']}');
     }
-    print('$trx_mode  description        : ${tapSDKResult!['description']}');
-    print('$trx_mode  message           : ${tapSDKResult!['message']}');
-    print('$trx_mode  card_first_six : ${tapSDKResult!['card_first_six']}');
-    print('$trx_mode  card_last_four   : ${tapSDKResult!['card_last_four']}');
-    print('$trx_mode  card_object         : ${tapSDKResult!['card_object']}');
-    print('$trx_mode  card_brand          : ${tapSDKResult!['card_brand']}');
-    print('$trx_mode  card_exp_month  : ${tapSDKResult!['card_exp_month']}');
-    print('$trx_mode  card_exp_year: ${tapSDKResult!['card_exp_year']}');
-    print('$trx_mode  acquirer_id  : ${tapSDKResult!['acquirer_id']}');
-    print(
-        '$trx_mode  acquirer_response_code : ${tapSDKResult!['acquirer_response_code']}');
-    print(
-        '$trx_mode  acquirer_response_message: ${tapSDKResult!['acquirer_response_message']}');
-    print('$trx_mode  source_id: ${tapSDKResult!['source_id']}');
-    print('$trx_mode  source_channel     : ${tapSDKResult!['source_channel']}');
-    print('$trx_mode  source_object      : ${tapSDKResult!['source_object']}');
-    print(
-        '$trx_mode source_payment_type : ${tapSDKResult!['source_payment_type']}');
+    if (trxMode == "Authorize") {
+      if (kDebugMode) {
+        print('$trxMode id              : ${tapSDKResult!['authorize_id']}');
+      }
+    } else {
+      if (kDebugMode) {
+        print('$trxMode id               : ${tapSDKResult!['charge_id']}');
+      }
+    }
+    if (kDebugMode) {
+      print('$trxMode  description        : ${tapSDKResult!['description']}');
+      print('$trxMode  message           : ${tapSDKResult!['message']}');
+      print('$trxMode  card_first_six : ${tapSDKResult!['card_first_six']}');
+      print('$trxMode  card_last_four   : ${tapSDKResult!['card_last_four']}');
+      print('$trxMode  card_object         : ${tapSDKResult!['card_object']}');
+      print('$trxMode  card_brand          : ${tapSDKResult!['card_brand']}');
+      print('$trxMode  card_exp_month  : ${tapSDKResult!['card_exp_month']}');
+      print('$trxMode  card_exp_year: ${tapSDKResult!['card_exp_year']}');
+      print('$trxMode  acquirer_id  : ${tapSDKResult!['acquirer_id']}');
+      print(
+          '$trxMode  acquirer_response_code : ${tapSDKResult!['acquirer_response_code']}');
+      print(
+          '$trxMode  acquirer_response_message: ${tapSDKResult!['acquirer_response_message']}');
+      print('$trxMode  source_id: ${tapSDKResult!['source_id']}');
+      print(
+          '$trxMode  source_channel     : ${tapSDKResult!['source_channel']}');
+      print('$trxMode  source_object      : ${tapSDKResult!['source_object']}');
+      print(
+          '$trxMode source_payment_type : ${tapSDKResult!['source_payment_type']}');
+    }
 
-    if (trx_mode == "Authorize") {
+    if (trxMode == "Authorize") {
       responseID = tapSDKResult!['authorize_id'];
     } else {
       responseID = tapSDKResult!['charge_id'];
@@ -195,9 +216,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        useMaterial3: true,
+      ),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
+          centerTitle: true,
         ),
         body: SafeArea(
           child: Stack(
@@ -224,24 +249,36 @@ class _MyAppState extends State<MyApp> {
                 left: 18,
                 right: 18,
                 child: SizedBox(
-                  height: 45,
-                  child: ElevatedButton(
-                    clipBehavior: Clip.hardEdge,
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.blue),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ),
+                  height: 50,
+                  child: FilledButton(
                     onPressed: startSDK,
-                    child: const Text(
-                      'Start',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 25,
+                          height: 25,
+                          child: AwesomeLoader(
+                            outerColor: Colors.white,
+                            innerColor: Colors.white,
+                            strokeWidth: 3.0,
+                            controller: loaderController,
+                          ),
+                        ),
+                        const Spacer(),
+                        const Text(
+                          'START',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        const Spacer(),
+                        const Icon(
+                          Icons.lock_outline,
+                          color: Colors.white,
+                        ),
+                      ],
                     ),
                   ),
                 ),

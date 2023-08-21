@@ -19,9 +19,11 @@ import company.tap.checkout.internal.api.enums.AddressType;
 import company.tap.checkout.internal.api.enums.AmountModificatorType;
 import company.tap.checkout.internal.api.enums.PaymentType;
 import company.tap.checkout.open.enums.TransactionMode;
+import company.tap.checkout.open.models.AddressModel;
 import company.tap.checkout.open.models.AuthorizeAction;
 import company.tap.checkout.internal.api.models.PhoneNumber;
 import company.tap.checkout.open.models.Destination;
+import company.tap.checkout.open.models.ItemsModel;
 import company.tap.checkout.open.models.Receipt;
 import company.tap.checkout.open.models.Reference;
 import company.tap.checkout.open.enums.CardType;
@@ -32,40 +34,34 @@ import company.tap.checkout.open.models.TapCustomer;
 import company.tap.checkout.open.models.Tax;
 
 public class DeserializationUtil {
-    static private boolean validJsonString(String jsonString) {
+    static private boolean isValidJson(String jsonString) {
         System.out.println("json string:::: " + jsonString);
-        if (jsonString == null || "null".equalsIgnoreCase(jsonString.toString()) || "".equalsIgnoreCase(jsonString.toString().trim())
-        ) return false;
-        return true;
+        try {
+            new JSONObject(jsonString);
+            return true;
+        } catch (JSONException e) {
+            return false;
+        }
     }
 
     static private JsonElement getJsonElement(String jsonString, String type) {
-        JsonParser jsonParser = new JsonParser();
         JsonElement jsonElement;
         if ("array".equalsIgnoreCase(type)) {
-            JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
+            JsonArray jsonArray = (JsonArray) JsonParser.parseString(jsonString);
             jsonElement = jsonArray;
         } else {
-            JsonObject jsonArray = (JsonObject) jsonParser.parse(jsonString);
-            jsonElement = jsonArray;
+            JsonObject jsonObject = (JsonObject) JsonParser.parseString(jsonString);
+            jsonElement = jsonObject;
         }
         return jsonElement;
-    }
-
-    public static Shipping getShipping(Object jsonString) {
-        if (!validJsonString(jsonString.toString())) return null;
-        JsonElement jsonElement = getJsonElement(jsonString.toString(), "object");
-        Type listType = new TypeToken<Shipping>() {
-        }.getType();
-        Shipping shipping = new Gson().fromJson(jsonElement, listType);
-        System.out.println(shipping.getDescription());
-        return shipping;
     }
 
 
     // taxes
     static public ArrayList<Tax> getTaxes(Object jsonString) {
-        if (!validJsonString(jsonString.toString())) return null;
+        if (jsonString == null)
+            return null;
+        if (!isValidJson(jsonString.toString())) return null;
         JsonElement jsonElement = getJsonElement(jsonString.toString(), "array");
         Type listType = new TypeToken<List<Tax>>() {
         }.getType();
@@ -75,19 +71,23 @@ public class DeserializationUtil {
 
 
     // items
-    static public ArrayList<PaymentItem> getPaymentItems(Object jsonString) {
-        if (!validJsonString(jsonString.toString())) return null;
+    static public ArrayList<ItemsModel> getPaymentItems(Object jsonString) {
+        if (jsonString == null)
+            return null;
+        if (!isValidJson(jsonString.toString())) return null;
         JsonElement jsonElement = getJsonElement(jsonString.toString(), "array");
-        Type listType = new TypeToken<List<PaymentItem>>() {
+        Type listType = new TypeToken<List<ItemsModel>>() {
         }.getType();
-        List<PaymentItem> taxesList = new Gson().fromJson(jsonElement, listType);
-        return (ArrayList<PaymentItem>) taxesList;
+        List<ItemsModel> taxesList = new Gson().fromJson(jsonElement, listType);
+        return (ArrayList<ItemsModel>) taxesList;
     }
 
 
     // metadata
     static public HashMap<String, String> getMetaData(Object jsonString) {
-        if (!validJsonString(jsonString.toString())) return null;
+        if (jsonString == null)
+            return null;
+        if (!isValidJson(jsonString.toString())) return null;
         JsonElement jsonElement = getJsonElement(jsonString.toString(), "object");
         Type listType = new TypeToken<HashMap<String, String>>() {
         }.getType();
@@ -98,7 +98,9 @@ public class DeserializationUtil {
 
 
     public static Reference getReference(Object jsonString) {
-        if (!validJsonString(jsonString.toString())) return null;
+        if (jsonString == null)
+            return null;
+        if (!isValidJson(jsonString.toString())) return null;
         JsonElement jsonElement = getJsonElement(jsonString.toString(), "object");
         Type listType = new TypeToken<Reference>() {
         }.getType();
@@ -108,7 +110,10 @@ public class DeserializationUtil {
     }
 
     public static Receipt getReceipt(Object jsonString) {
-        if (!validJsonString(jsonString.toString())) return null;
+        System.out.println("Inside get recipet");
+        if (jsonString == null)
+            return null;
+        if (!isValidJson(jsonString.toString())) return null;
         JsonElement jsonElement = getJsonElement(jsonString.toString(), "object");
         Type listType = new TypeToken<Receipt>() {
         }.getType();
@@ -117,8 +122,23 @@ public class DeserializationUtil {
         return receipt;
     }
 
+    public static Shipping getShipping(Object jsonString) {
+        if (jsonString == null)
+            return null;
+        if (!isValidJson(jsonString.toString())) return null;
+        JsonElement jsonElement = getJsonElement(jsonString.toString(), "object");
+        Type listType = new TypeToken<Shipping>() {
+        }.getType();
+        Shipping shipping = new Gson().fromJson(jsonElement, listType);
+        System.out.println(shipping.getDescription());
+        return shipping;
+    }
+
+
     public static AuthorizeAction getAuthorizeAction(Object jsonString) {
-        if (!validJsonString(jsonString.toString())) return null;
+        if (jsonString == null)
+            return null;
+        if (!isValidJson(jsonString.toString())) return null;
         JsonElement jsonElement = getJsonElement(jsonString.toString(), "object");
         Type listType = new TypeToken<AuthorizeAction>() {
         }.getType();
@@ -129,7 +149,9 @@ public class DeserializationUtil {
 
     // items
     static public ArrayList<Destination> getDestinations(Object jsonString) {
-        if (!validJsonString(jsonString.toString())) return null;
+        if (jsonString == null)
+            return null;
+        if (!isValidJson(jsonString.toString())) return null;
         JsonElement jsonElement = getJsonElement(jsonString.toString(), "array");
         Type listType = new TypeToken<List<Destination>>() {
         }.getType();
@@ -146,12 +168,22 @@ public class DeserializationUtil {
 
         JSONObject jsonObject;
         try {
+            assert customerString != null;
             jsonObject = new JSONObject(customerString);
             String phone = jsonObject.get("phone").toString();
             JSONObject phoneJsonObject;
             phoneJsonObject = new JSONObject(phone);
             System.out.println("phone object >>>>> " + phone);
             PhoneNumber phoneNumber = new PhoneNumber(phoneJsonObject.get("country_code").toString(), phoneJsonObject.get("number").toString());
+
+            String address = jsonObject.get("phone").toString();
+            JSONObject addressJsonObject;
+            addressJsonObject = new JSONObject(phone);
+            System.out.println("phone object >>>>> " + phone);
+            // Need to set data for address model
+            AddressModel addressModel = new AddressModel();
+
+
             System.out.println("Phone Number >>>> " + phoneNumber);
             return new TapCustomer.CustomerBuilder(jsonObject.get("id").toString()).firstName(jsonObject.get("first_name").toString())
                     .lastName(jsonObject.get("last_name").toString()).phone(phoneNumber)
@@ -174,11 +206,15 @@ public class DeserializationUtil {
             case "AUTHORIZE_CAPTURE":
                 return TransactionMode.AUTHORIZE_CAPTURE;
             case "SAVE_CARD":
+                return TransactionMode.SAVE_CARD;
+            case "TOKENIZE_CARD":
+                return TransactionMode.TOKENIZE_CARD;
         }
         return TransactionMode.PURCHASE;
     }
 
     public static CardType getCardType(String jsonString) {
+        System.out.println("CARD TYPE " + jsonString);
         if (jsonString == null || jsonString == CardType.ALL.toString() ||
                 "null".equalsIgnoreCase(jsonString) ||
                 "".equalsIgnoreCase(jsonString.trim())

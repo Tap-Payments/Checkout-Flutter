@@ -80,21 +80,26 @@ class CheckoutFlutter {
       "production": productionKey,
       "bundleID": bundleID,
       "localeIdentifier": locale,
-      "flippingStatus":
-          flippingStatus ?? FlippingStatus.FlipOnLoadWithFlippingBack.name,
+      "flippingStatus": flippingStatus == null
+          ? FlippingStatus.FlipOnLoadWithFlippingBack.name
+          : flippingStatus.name,
       "displayColoredDark": displayColoredDark,
-      "currency": currencyCode ?? TapCurrencyCode.KWD.name,
+      "currency":
+          currencyCode == null ? TapCurrencyCode.KWD.name : currencyCode.name,
       "supportedCurrencies": supportedCurrencies ?? [],
       "amount": amount,
       "items": items ?? [],
       "applePayMerchantID": applePayMerchantID ?? "merchant.tap.gosell",
       "swipeDownToDismiss": swipeDownToDismiss,
-      "paymentType": paymentType ?? PaymentType.All.name.toString(),
-      "closeButtonStyle":
-          closeButtonStyle ?? CloseButtonStyle.Title.name.toString(),
+      "paymentType":
+          paymentType == null ? PaymentType.All.name : paymentType.name,
+      "closeButtonStyle": closeButtonStyle == null
+          ? CloseButtonStyle.Title.name
+          : closeButtonStyle.name,
       "showDragHandler": showDragHandler,
-      "transactionMode":
-          transactionMode ?? TransactionModeType.PURCHASE.name.toString(),
+      "transactionMode": transactionMode == null
+          ? TransactionModeType.PURCHASE.name
+          : transactionMode.name,
       "customer": jsonEncode(tapCustomer),
       "destinations": destinations == null ? [] : jsonEncode(destinations),
       "tapMerchantID": tapMerchantID,
@@ -102,8 +107,9 @@ class CheckoutFlutter {
           tapLoggingType ?? [TapLoggingType.CONSOLE.name.toString()],
       "taxes": taxes == null ? [] : jsonEncode(taxes),
       "shipping": shipping == null ? null : jsonEncode(shipping),
-      "allowedCardTypes":
-          allowedCardType ?? [AllowedCardType.ALL.name.toString()],
+      "allowedCardTypes": allowedCardType == null
+          ? AllowedCardType.ALL.name
+          : allowedCardType.name,
       "postURL": postURL,
       "paymentDescription": paymentDescription,
       "paymentMetadata": metadata,
@@ -116,18 +122,21 @@ class CheckoutFlutter {
       "allowsToSaveSameCardMoreThanOnce": allowsToSaveSameCardMoreThanOnce,
       "enableSaveCard": enableSaveCard,
       "isSaveCardSwitchOnByDefault": isSaveCardSwitchOnByDefault,
-      "sdkMode": sdkMode ?? SDKMode.Sandbox.name.toString(),
+      "sdkMode": sdkMode == null ? SDKMode.Sandbox.name : sdkMode.name,
       "collectCreditCardName": collectCreditCardName,
       "creditCardNameEditable": creditCardNameEditable,
       "creditCardNamePreload": creditCardNamePreload,
-      "showSaveCreditCard":
-          showSaveCreditCard ?? ShowSaveCreditCard.None.name.toString(),
+      "showSaveCreditCard": showSaveCreditCard == null
+          ? ShowSaveCreditCard.None.name
+          : showSaveCreditCard.name,
       "isSubscription": isSubscription,
       "recurringPaymentRequest": recurringPaymentRequest,
-      "applePayButtonType": applePayButtonType ??
-          ApplePayButtonType.AppleLogoOnly.name.toString(),
-      "applePayButtonStyle":
-          applePayButtonStyle ?? ApplePayButtonStyle.Black.name.toString(),
+      "applePayButtonType": applePayButtonType == null
+          ? ApplePayButtonType.AppleLogoOnly.name
+          : applePayButtonType.name,
+      "applePayButtonStyle": applePayButtonStyle == null
+          ? ApplePayButtonStyle.Black.name
+          : applePayButtonStyle.name,
       "shouldFlipCardData": shouldFlipCardData,
     };
   }

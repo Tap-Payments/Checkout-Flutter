@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -20,18 +21,12 @@ import company.tap.checkout.internal.api.models.Authorize;
 import company.tap.checkout.internal.api.models.Charge;
 import company.tap.checkout.internal.api.models.Token;
 import company.tap.checkout.open.controller.SDKSession;
-import company.tap.checkout.open.enums.CardType;
-import company.tap.checkout.open.enums.SdkMode;
-import company.tap.checkout.open.exceptions.CurrencyException;
 import company.tap.checkout.open.interfaces.CheckOutDelegate;
-import company.tap.checkout.open.models.AuthorizeAction;
 import company.tap.checkout.open.models.CardsList;
-import company.tap.checkout.open.models.Destinations;
 import company.tap.checkout.open.models.OrderObject;
 import company.tap.checkout.open.models.TapCurrency;
 import company.tap.checkout.open.models.TapCustomer;
 import company.tap.tapnetworkkit.exception.GoSellError;
-import company.tap.tapuilibraryy.themekit.ThemeManager;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
@@ -68,9 +63,6 @@ public class CheckoutSDKDelegate extends FragmentManager implements PluginRegist
             finishWithAlreadyActiveError(result);
             return;
         }
-
-       // ThemeManager.loadTapTheme(this.activity.getResources(), R.raw.defaultlighttheme, "lighttheme");
-
         showSDK(sdkConfigurations, result);
     }
 
@@ -81,28 +73,17 @@ public class CheckoutSDKDelegate extends FragmentManager implements PluginRegist
     }
 
     private void showSDK(HashMap<String, Object> sdkConfigurations, MethodChannel.Result result) {
-        HashMap<String, Object> sdkConfiguration = (HashMap<String, Object>) sdkConfigurations
+        HashMap<String, Object> config = (HashMap<String, Object>) sdkConfigurations
                 .get("configuration");
-        System.out.println("SDK CONFIGURATION >>>>>>>" + sdkConfiguration);
-        String sandboxKey = (String) sdkConfiguration.get("sandbox");
+        System.out.println("SDK CONFIGURATION >>>>>>>" + config);
+        String sandboxKey = (String) config.get("sandbox");
 
-        String productionKey = (String) sdkConfiguration.get("production");
-        String locale = (String) sdkConfiguration.get("localeIdentifier");
-        String bundleID = (String) sdkConfiguration.get("bundleID");
-        System.out.println("SECRET KEY >>>>>>>" + sandboxKey);
-        System.out.println("PRODUCTION KEY >>>>>>>" + productionKey);
-        System.out.println("LOCALE >>>>>>>" + locale);
-        System.out.println("BUNDLE ID >>>>>>>" + bundleID);
+        String productionKey = (String) config.get("production");
+        String locale = (String) config.get("localeIdentifier");
+        String bundleID = (String) config.get("bundleID");
 
         configureApp(sandboxKey, productionKey, bundleID, locale);
-
-        // configureSDKThemeObject();
-
-        /**
-         * Required step. Configure SDK Session with all required data.
-         */
-        System.out.println("SDK SESSION CONFIGURATION");
-        configureSDKSession(sdkConfiguration, result);
+        configureSDKSession(config, result);
 
         sdkSession.startSDK(this, activity, activity);
     }
@@ -113,122 +94,48 @@ public class CheckoutSDKDelegate extends FragmentManager implements PluginRegist
         if (sdkSession == null) {
             sdkSession = SDKSession.INSTANCE;
         }
-        //sdkSession = SDKSession.INSTANCE;
         sdkSession.addSessionDelegate(this);
-        System.out.println("addSessionDelegate");
-
         sdkSession.instantiatePaymentDataSource();
-        System.out.println("instantiatePaymentDataSource");
-
         sdkSession.setCustomer(Objects.requireNonNull(DeserializationUtil.getCustomer(sessionParameters)));
-        System.out.println("setCustomer");
         sdkSession.setTransactionMode(DeserializationUtil.getTransactionMode((String) sessionParameters.get("transactionMode")));
-        System.out.println("setTransactionMode");
         BigDecimal amount;
         try {
             amount = new BigDecimal(Double.toString((Double) sessionParameters.get("amount")));
         } catch (Exception e) {
-//            Log.d("CheckoutSDKDelegate : ", "Invalid amount can't be parsed to double : "
-//                    + (String) Objects.requireNonNull(sessionParameters.get("amount")));
+            Log.d("CheckoutSDKDelegate : ", "Invalid amount can't be parsed to double ");
             amount = BigDecimal.ZERO;
         }
         sdkSession.setAmount(amount);
-        System.out.println("setAmount");
+        sdkSession.setCardType(DeserializationUtil.getCardType((String) sessionParameters.get("allowedCardTypes")));
 
-        sdkSession.setCardType(CardType.ALL);  // sdkSession.setCardType(DeserializationUtil.getCardType((String) sessionParameters.get("allowedCardTypes")));
-        System.out.println("setCardType");
-        sdkSession.setAuthorizeAction(null); // sdkSession.setAuthorizeAction(DeserializationUtil.getAuthorizeAction(sessionParameters.get("authorizeAction")));
-        System.out.println("setAuthorizeAction");
-
-        sdkSession.setReceiptSettings(null); // sdkSession.setReceiptSettings(DeserializationUtil.getReceipt(sessionParameters.get("receiptSettings")));
-        System.out.println("setReceiptSettings");
+        sdkSession.setAuthorizeAction(DeserializationUtil.getAuthorizeAction(sessionParameters.get("authorizeAction")));
+        sdkSession.setReceiptSettings(DeserializationUtil.getReceipt(sessionParameters.get("receiptSettings")));
         sdkSession.setDestination(null);
-        System.out.println("setDestination");
-        //   sdkSession.setDestination(DeserializationUtil.getDestinations(Objects.requireNonNull(sessionParameters.get("destinations")))); // Issue here
+        /// This set destination object should be an array instead of single object
+        /// sdkSession.setDestination(DeserializationUtil.getDestinations(Objects.requireNonNull(sessionParameters.get("destinations")))); // Issue here
+
         sdkSession.setShipping(null);
-        System.out.println("setShipping");
-        sdkSession.setPaymentItems(null);
-        System.out.println("setPaymentItems");
-        //     sdkSession.setShipping(DeserializationUtil.getShipping(sessionParameters.get("shipping"))); Issue here
-        //     sdkSession.setPaymentItems(DeserializationUtil.getPaymentItems(sessionParameters.get("items")));// ** Issue here
-
-
-        // Set Taxes array list : TODO will update later
-        sdkSession.setTaxes(null); // sdkSession.setTaxes(DeserializationUtil.getTaxes(sessionParameters.get("taxes")));// ** Optional ** you can pass
-        System.out.println("setTaxes");
-        // empty array list
-
-
-        // Post URL
-        sdkSession.setPostURL(sessionParameters.get("postURL").toString());// ** Optional **
-        System.out.println("setPostURL");
-        // Payment Description
-        sdkSession.setPaymentDescription(sessionParameters.get("paymentDescription").toString()); // ** Optional **
-        System.out.println("setPaymentDescription");
-        // Payment Extra Info
-
+        /// This shipping method getting Array List, it should be a single object
+        // sdkSession.setShipping(DeserializationUtil.getShipping(sessionParameters.get("shipping")));
+        sdkSession.setPaymentItems(DeserializationUtil.getPaymentItems(sessionParameters.get("items")));
+        sdkSession.setTaxes(DeserializationUtil.getTaxes(sessionParameters.get("taxes")));
+        sdkSession.setPostURL(sessionParameters.get("postURL").toString());
+        sdkSession.setPaymentDescription(sessionParameters.get("paymentDescription").toString());
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("name","azhar");
-        sdkSession.setPaymentMetadata(hashMap);// **
-        System.out.println("setPaymentMetadata");
-        // Payment Reference
-        sdkSession.setPaymentReference(null); // sdkSession.setPaymentReference(DeserializationUtil.getReference(sessionParameters.get("paymentReference"))); // **
-        System.out.println("setPaymentReference");
-        // Payment Statement Descriptor
-        sdkSession.setPaymentStatementDescriptor(sessionParameters.get("paymentStatementDescriptor").toString()); // **
-        System.out.println("setPaymentStatementDescriptor");
-        // Optional
-        // **
-
-        // Enable or Disable Saving Card
-        sdkSession.isUserAllowedToSaveCard(true); // sdkSession.isUserAllowedToSaveCard((boolean) sessionParameters.get("isUserAllowedToSaveCard")); // ** Required
-        System.out.println("isUserAllowedToSaveCard");
-        // ** you can
-        // pass boolean
-
-        // Enable or Disable 3DSecure
-        sdkSession.isRequires3DSecure(true); // sdkSession.isRequires3DSecure((boolean) sessionParameters.get("isRequires3DSecure"));
-        System.out.println("isRequires3DSecure");
-
-        // Set Authorize Action
-        sdkSession.setAuthorizeAction(null); // sdkSession.setAuthorizeAction(DeserializationUtil.getAuthorizeAction(sessionParameters.get("authorizeAction"))); // **
-        System.out.println("setAuthorizeAction");
-
-        sdkSession.setMerchantID(null); // sdkSession.setMerchantID(Objects.requireNonNull(sessionParameters.get("merchantID")).toString()); // ** Optional ** you can pass
-        System.out.println("setMerchantID");
-        // merchant id or null
-
-        sdkSession.setCardType(CardType.ALL); // sdkSession.setCardType(DeserializationUtil.getCardType(sessionParameters.get("allowedCadTypes").toString())); // **
-        System.out.println("setCardType");
-
-        sdkSession.setPaymentType("ALL"); // sdkSession.setPaymentType(DeserializationUtil.getPaymentType((String) sessionParameters.get("paymentType")));
-        System.out.println("setPaymentType");
-        sdkSession.setSdkMode(SdkMode.SAND_BOX);  //sdkSession.setSdkMode(DeserializationUtil.getSDKMode((String) sessionParameters.get("sdkMode")));
-        System.out.println("setSdkMode");
-        sdkSession.setDefaultCardHolderName(null);//   sdkSession.setDefaultCardHolderName(Objects.requireNonNull(sessionParameters.get("cardHolderName")).toString()); // ** Optional ** you
-        System.out.println("setDefaultCardHolderName");
-        sdkSession.isUserAllowedToEnableCardHolderName(false); //   sdkSession.isUserAllowedToEnableCardHolderName((boolean) sessionParameters.get("editCardHolderName"));
-        System.out.println("isUserAllowedToEnableCardHolderName");
-        // set transaction currency associated to your account
-//        TapCurrency transactionCurrency;
-//        try {
-//            transactionCurrency = new TapCurrency(
-//                    (String) Objects.requireNonNull(sessionParameters.get("currency")));
-//        } catch (CurrencyException c) {
-//            Log.d("CheckoutSDKDelegate : ", "Unknown currency exception thrown : "
-//                    + (String) Objects.requireNonNull(sessionParameters.get("currency")));
-//            transactionCurrency = new TapCurrency("KWD");
-//        } catch (Exception e) {
-//            Log.d("CheckoutSDKDelegate : ", "Unknown currency: "
-//                    + (String) Objects.requireNonNull(sessionParameters.get("currency")));
-//            transactionCurrency = new TapCurrency("KWD");
-//        }
-        sdkSession.setTransactionCurrency(new TapCurrency("KWD")); // ** Required **
-        System.out.println("setTransactionCurrency");
-        sdkSession.setOrderObject(new OrderObject(BigDecimal.ONE, "KWD",new TapCustomer("cus_TS012520211349Za012907577","Muhammad","Azhar","Maqbool","a.maqbool@tap.company",null,null,"+92",null,"en"), null, null, null, null, null, null));
-
+        hashMap.put("a", "b");
+        sdkSession.setPaymentMetadata(hashMap);
+        sdkSession.setPaymentReference(DeserializationUtil.getReference(sessionParameters.get("paymentReference")));
+        sdkSession.setPaymentStatementDescriptor(sessionParameters.get("paymentStatementDescriptor").toString());
+        sdkSession.isRequires3DSecure((boolean) sessionParameters.get("require3DSecure"));
+        sdkSession.setAuthorizeAction(DeserializationUtil.getAuthorizeAction(sessionParameters.get("authorizeAction")));
+        sdkSession.setMerchantID((String) sessionParameters.get("merchantID"));
+        sdkSession.setCardType(DeserializationUtil.getCardType((String) sessionParameters.get("allowedCadTypes")));
+        sdkSession.setPaymentType(DeserializationUtil.getPaymentType((String) sessionParameters.get("paymentType")));
+        sdkSession.setSdkMode(DeserializationUtil.getSDKMode((String) sessionParameters.get("sdkMode")));
+        sdkSession.setDefaultCardHolderName((String) sessionParameters.get("cardHolderName"));
+        sdkSession.setTransactionCurrency(new TapCurrency(Objects.requireNonNull(sessionParameters.get("currency")).toString()));
+        sdkSession.setOrderObject(new OrderObject(BigDecimal.ONE, "KWD", new TapCustomer("cus_TS012520211349Za012907577", "Muhammad", "Azhar", "Maqbool", "a.maqbool@tap.company", null, null, "+92", null, "en"), null, null, null, null, null, null));
         sdkSession.startPayment(this);
-        System.out.println("Start payment");
 
     }
 
@@ -253,7 +160,13 @@ public class CheckoutSDKDelegate extends FragmentManager implements PluginRegist
     }
 
     private void sendChargeResult(Charge charge, String paymentStatus, String trx_mode) {
-
+        System.out.println("CHARGE RESULT RESPONSE >>>>>>>>>>" + charge);
+        Map<String, Object> resultMap = new HashMap<>();
+        if (charge.getStatus() != null)
+            resultMap.put("sdk_result", paymentStatus);
+        resultMap.put("trx_mode", trx_mode);
+        pendingResult.success(resultMap);
+        pendingResult = null;
 
     }
 
@@ -262,7 +175,13 @@ public class CheckoutSDKDelegate extends FragmentManager implements PluginRegist
     }
 
     private void sendSDKError(int errorCode, String errorMessage, String errorBody) {
-
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("sdk_result", "SDK_ERROR");
+        resultMap.put("sdk_error_code", errorCode);
+        resultMap.put("sdk_error_message", errorMessage);
+        resultMap.put("sdk_error_description", errorBody);
+        pendingResult.success(resultMap);
+        pendingResult = null;
     }
 
 
