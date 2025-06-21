@@ -6,6 +6,8 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        jcenter()
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
@@ -14,10 +16,12 @@ buildscript {
     }
 }
 
-allprojects {
+rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
+        jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -63,4 +67,9 @@ android {
             }
         }
     }
+}
+
+dependencies {
+    implementation 'com.github.Tap-Payments:Checkout-Android:1.0.0'
+
 }

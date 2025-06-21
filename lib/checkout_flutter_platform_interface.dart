@@ -23,7 +23,14 @@ abstract class CheckoutFlutterPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+  /// Start the checkout process with configurations and callbacks
+  Future<bool> startCheckout({
+    required Map<String, dynamic> configurations,
+    Function()? onClose,
+    Function()? onReady,
+    Function(String)? onSuccess,
+    Function(String)? onError,
+  }) {
+    throw UnimplementedError('startCheckout() has not been implemented.');
   }
 }
