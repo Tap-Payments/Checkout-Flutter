@@ -14,6 +14,7 @@ class MethodChannelCheckoutFlutter extends CheckoutFlutterPlatform {
   Function()? _onReady;
   Function(String)? _onSuccess;
   Function(String)? _onError;
+  Function()? _onCancel;
 
   MethodChannelCheckoutFlutter() {
     methodChannel.setMethodCallHandler(_handleMethodCall);
@@ -32,8 +33,11 @@ class MethodChannelCheckoutFlutter extends CheckoutFlutterPlatform {
         _onSuccess?.call(data);
         break;
       case 'onError':
-        final data = call.arguments['data'] as String? ?? '';
-        _onError?.call(data);
+        final error = call.arguments['error'] as String? ?? '';
+        _onError?.call(error);
+        break;
+      case 'onCancel':
+        _onCancel?.call();
         break;
     }
   }
@@ -45,11 +49,13 @@ class MethodChannelCheckoutFlutter extends CheckoutFlutterPlatform {
     Function()? onReady,
     Function(String)? onSuccess,
     Function(String)? onError,
+    Function()? onCancel,
   }) async {
     _onClose = onClose;
     _onReady = onReady;
     _onSuccess = onSuccess;
     _onError = onError;
+    _onCancel = onCancel;
 
     try {
       final result = await methodChannel.invokeMethod<bool>('startCheckout', {

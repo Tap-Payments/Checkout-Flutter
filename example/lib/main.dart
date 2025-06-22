@@ -127,6 +127,12 @@ class _MyAppState extends State<MyApp> {
           });
           print('Checkout closed');
         },
+        onCancel: () {
+          setState(() {
+            _checkoutStatus = 'Checkout cancelled';
+          });
+          print('Checkout cancelled (Android)');
+        },
       );
 
       if (!success) {

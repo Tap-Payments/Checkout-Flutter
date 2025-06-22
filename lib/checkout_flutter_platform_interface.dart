@@ -30,6 +30,7 @@ abstract class CheckoutFlutterPlatform extends PlatformInterface {
     Function()? onReady,
     Function(String)? onSuccess,
     Function(String)? onError,
+    Function()? onCancel,
   }) {
     throw UnimplementedError('startCheckout() has not been implemented.');
   }

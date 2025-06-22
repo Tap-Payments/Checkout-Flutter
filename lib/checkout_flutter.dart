@@ -7,6 +7,7 @@ import 'checkout_flutter_platform_interface.dart';
 /// [onReady] - Callback when checkout is ready
 /// [onSuccess] - Callback when checkout succeeds with data
 /// [onError] - Callback when checkout fails with error message
+/// [onCancel] - Callback when checkout is cancelled (Android only)
 ///
 /// Returns true if checkout started successfully, false otherwise
 Future<bool> startCheckout({
@@ -15,6 +16,7 @@ Future<bool> startCheckout({
   Function()? onReady,
   Function(String)? onSuccess,
   Function(String)? onError,
+  Function()? onCancel,
 }) {
   return CheckoutFlutterPlatform.instance.startCheckout(
     configurations: configurations,
@@ -22,5 +24,6 @@ Future<bool> startCheckout({
     onReady: onReady,
     onSuccess: onSuccess,
     onError: onError,
+    onCancel: onCancel,
   );
 }
