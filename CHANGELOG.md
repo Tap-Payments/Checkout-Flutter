@@ -1,3 +1,3 @@
-## 0.0.1
+## 1.0.1 (2024-07-19)
 
-* TODO: Describe initial release.
+* Added production support for Android and iOS.
