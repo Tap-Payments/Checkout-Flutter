@@ -35,6 +35,14 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+            
+            // Enable minification with ProGuard rules to keep Tap SDK classes
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android.txt"), // Use less aggressive optimization
+                "proguard-rules.pro"
+            )
         }
     }
 }
