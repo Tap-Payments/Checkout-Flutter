@@ -1,5 +1,5 @@
 PODS:
-  - Checkout-IOS (1.0.0):
+  - Checkout-IOS (1.0.1):
     - SharedDataModels-iOS
     - SnapKit
     - SwiftEntryKit
@@ -7,7 +7,7 @@ PODS:
     - TapCardScannerWebWrapper-iOS
     - TapFontKit-iOS
   - checkout_flutter (0.0.1):
-    - Checkout-IOS (= 1.0.0)
+    - Checkout-IOS (= 1.0.1)
     - Flutter
   - Flutter (1.0.0)
   - integration_test (0.0.1):
@@ -58,8 +58,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/integration_test/ios"
 
 SPEC CHECKSUMS:
-  Checkout-IOS: 66c580dd73019553d5331ae050d6b26d9c84ca78
-  checkout_flutter: 02762f0f86f4517ac63374d0a75b6564ac131e20
+  Checkout-IOS: 3925d2d1637d1179d5b768d11b69b1da4660e1e4
+  checkout_flutter: 7c282a89b11da028ec0884c5d6ad68ca51faefd2
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
   SharedDataModels-iOS: 03d22b8a256a6ce698180b24d3ff8fefe42707b1
