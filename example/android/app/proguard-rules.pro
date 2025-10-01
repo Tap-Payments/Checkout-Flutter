@@ -256,3 +256,4 @@
 # Ignore warnings for classes that may not be available in all Android versions
 -dontwarn android.support.**
 -dontwarn androidx.annotation.Keep
+-dontwarn kotlinx.parcelize.Parcelize
