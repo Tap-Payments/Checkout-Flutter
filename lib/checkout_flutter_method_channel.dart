@@ -33,7 +33,7 @@ class MethodChannelCheckoutFlutter extends CheckoutFlutterPlatform {
         _onSuccess?.call(data);
         break;
       case 'onError':
-        final error = call.arguments['error'] as String? ?? '';
+        final error = call.arguments['data'] as String? ?? '';
         _onError?.call(error);
         break;
       case 'onCancel':

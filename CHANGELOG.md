@@ -1,5 +1,6 @@
+## 1.0.4 (2025-10-14)
+* Fix error parsing 
 ## 1.0.3 (2025-10-01)
-
 * Support android 35 and 36
 ```proguard
 # Add project specific ProGuard rules here.

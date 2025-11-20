@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
         "supportedPaymentMethods": "ALL",
         "paymentType": "ALL",
         "selectedCurrency": "KWD",
-        "supportedCurrencies": "ALL",
+        "supportedCurrencies": "ALL", // or ["SAR"]
         "supportedPaymentTypes": [],
         "supportedRegions": [],
         "supportedSchemes": [],
@@ -53,8 +53,10 @@ class _MyAppState extends State<MyApp> {
           "phone": {"countryCode": "965", "number": "55567890"},
         },
         "transaction": {
-          "mode": "charge",
+          "mode":
+              "charge", // or "authorize" // add "authorize" instead of "charge" to test authorization
           "charge": {
+            // or "authorize" // add "authorize" instead of "charge" to test authorization
             "saveCard": true,
             "auto": {"type": "VOID", "time": 100},
             "redirect": {
