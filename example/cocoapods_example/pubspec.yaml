@@ -1,0 +1,29 @@
+name: checkout_flutter_example
+description: "checkout_flutter example app; iOS pulls in Checkout-IOS with CocoaPods."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  checkout_flutter:
+    path: ../../
+  # The screens, settings and tests both example apps share.
+  checkout_example:
+    path: ../shared
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  # Always CocoaPods, even when Swift Package Manager is turned on globally.
+  disable-swift-package-manager: true
+

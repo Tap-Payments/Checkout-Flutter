@@ -1,0 +1,27 @@
+name: checkout_example
+description: "The example app of checkout_flutter, shared by cocoapods_example and spm_example."
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ^3.7.2
+  flutter: '>=3.24.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  checkout_flutter:
+    path: ../../
+  shared_preferences: ^2.5.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    # Debug builds read your own sandbox keys from assets/keys.local.json (gitignored);
+    # see assets/keys.local.example.json.
+    - assets/

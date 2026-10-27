@@ -1,12 +1,11 @@
 group = "com.example.checkout_flutter"
-version = "1.0-SNAPSHOT"
+version = "1.0.5"
 
 buildscript {
-    ext.kotlin_version = "1.8.22"
+    ext.kotlin_version = "2.1.0"
     repositories {
         google()
         mavenCentral()
-        jcenter()
         maven { url 'https://jitpack.io' }
     }
 
@@ -20,7 +19,6 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
         maven { url 'https://jitpack.io' }
     }
 }
@@ -31,7 +29,7 @@ apply plugin: "kotlin-android"
 android {
     namespace = "com.example.checkout_flutter"
 
-    compileSdk = 35
+    compileSdk = 36
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -49,6 +47,8 @@ android {
 
     defaultConfig {
         minSdk = 24
+        // Keep rules for Checkout-Android; release builds of the app pick them up automatically.
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     dependencies {
@@ -70,5 +70,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.Tap-Payments:Checkout-Android:1.0.6'
+    implementation 'com.github.Tap-Payments:Checkout-Android:1.0.9'
 }

@@ -1,30 +1,26 @@
 #
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
+# Used when the app builds with CocoaPods. checkout_flutter/Package.swift is the Swift Package
+# Manager equivalent; keep the Checkout-IOS versions in step.
 # Run `pod lib lint checkout_flutter.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
   s.name             = 'checkout_flutter'
-  s.version          = '0.0.1'
-  s.summary          = 'A new Flutter plugin project.'
+  s.version          = '1.0.5'
+  s.summary          = 'Tap Payments checkout for Flutter.'
   s.description      = <<-DESC
-A new Flutter plugin project.
+Accept a payment with one or multiple payment methods securely. Powered by Tap Payments.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/Tap-Payments/Checkout-Flutter'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Tap Payments' => 'm.allam@tap.company' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files     = 'checkout_flutter/Sources/checkout_flutter/**/*.swift'
+  s.resource_bundles = { 'checkout_flutter_privacy' => ['checkout_flutter/Sources/checkout_flutter/PrivacyInfo.xcprivacy'] }
   s.dependency 'Flutter'
-  s.platform = :ios, '16.6'
-  s.dependency 'Checkout-IOS', '1.0.1'
+  s.dependency 'Checkout-IOS', '1.0.7'
+  s.platform = :ios, '15.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.0'
-
-  # If your plugin requires a privacy manifest, for example if it uses any
-  # required reason APIs, update the PrivacyInfo.xcprivacy file to describe your
-  # plugin's privacy impact, and then uncomment this line. For more information,
-  # see https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
-  # s.resource_bundles = {'checkout_flutter_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
 end

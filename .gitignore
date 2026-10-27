@@ -31,3 +31,6 @@ migrate_working_dir/
 .flutter-plugins
 .flutter-plugins-dependencies
 build/
+
+# Resolved by Xcode when the plugin is built with Swift Package Manager; apps pin their own versions.
+/ios/checkout_flutter/Package.resolved

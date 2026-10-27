@@ -1,0 +1,60 @@
+{
+  "originHash" : "c0dfb7c68aeaa3d3474aec7c88ed37e52c6a81b5740a6366b8eb8b10b9392959",
+  "pins" : [
+    {
+      "identity" : "checkout-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Tap-Payments/Checkout-IOS.git",
+      "state" : {
+        "revision" : "aeaa36d35b875a382f8e6c54e8cfdb1df90d1682",
+        "version" : "1.0.7"
+      }
+    },
+    {
+      "identity" : "shareddatamodels-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Tap-Payments/SharedDataModels-iOS.git",
+      "state" : {
+        "revision" : "16a8c45e33bab5033956270a4f79c662fd187c16",
+        "version" : "0.0.14"
+      }
+    },
+    {
+      "identity" : "swiftentrykit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Tap-Payments/SwiftEntryKit.git",
+      "state" : {
+        "revision" : "c7a958a4c67c17ba71ddddbfd99ff5fe9df51adc",
+        "version" : "2.0.2"
+      }
+    },
+    {
+      "identity" : "tapcardscannerwebwrapper-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Tap-Payments/TapCardScannerWebWrapper-iOS.git",
+      "state" : {
+        "revision" : "389436b81d1de6aafe43fc61ae4e1f8a8b4accec",
+        "version" : "0.0.6"
+      }
+    },
+    {
+      "identity" : "tapcardvlidatorkit-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Tap-Payments/TapCardVlidatorKit-iOS.git",
+      "state" : {
+        "revision" : "c0f84d2ab6e54ea3671dde059e1716d12be51880",
+        "version" : "1.0.26"
+      }
+    },
+    {
+      "identity" : "tapfontkit-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Tap-Payments/TapFontKit-iOS.git",
+      "state" : {
+        "revision" : "08cc8c405bddcadbdbecdfac119b5196bf514128",
+        "version" : "0.0.12"
+      }
+    }
+  ],
+  "version" : 3
+}

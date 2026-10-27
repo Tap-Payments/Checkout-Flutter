@@ -9,61 +9,55 @@ class MethodChannelCheckoutFlutter extends CheckoutFlutterPlatform {
   @visibleForTesting
   final methodChannel = const MethodChannel('checkout_flutter');
 
-  /// Callback functions for checkout events
-  Function()? _onClose;
+  /// Callbacks of the checkout that was started last.
   Function()? _onReady;
+  Function(String)? _onChargeCreated;
   Function(String)? _onSuccess;
   Function(String)? _onError;
-  Function()? _onCancel;
+  Function()? _onClose;
 
   MethodChannelCheckoutFlutter() {
     methodChannel.setMethodCallHandler(_handleMethodCall);
   }
 
   Future<void> _handleMethodCall(MethodCall call) async {
+    String data() => (call.arguments as Map?)?['data'] as String? ?? '';
     switch (call.method) {
-      case 'onClose':
-        _onClose?.call();
-        break;
       case 'onReady':
         _onReady?.call();
-        break;
+      case 'onChargeCreated':
+        _onChargeCreated?.call(data());
       case 'onSuccess':
-        final data = call.arguments['data'] as String? ?? '';
-        _onSuccess?.call(data);
-        break;
+        _onSuccess?.call(data());
       case 'onError':
-        final error = call.arguments['data'] as String? ?? '';
-        _onError?.call(error);
-        break;
-      case 'onCancel':
-        _onCancel?.call();
-        break;
+        _onError?.call(data());
+      case 'onClose':
+        _onClose?.call();
     }
   }
 
   @override
   Future<bool> startCheckout({
     required Map<String, dynamic> configurations,
-    Function()? onClose,
     Function()? onReady,
-    Function(String)? onSuccess,
-    Function(String)? onError,
-    Function()? onCancel,
+    Function(String data)? onChargeCreated,
+    Function(String data)? onSuccess,
+    Function(String data)? onError,
+    Function()? onClose,
   }) async {
-    _onClose = onClose;
     _onReady = onReady;
+    _onChargeCreated = onChargeCreated;
     _onSuccess = onSuccess;
     _onError = onError;
-    _onCancel = onCancel;
+    _onClose = onClose;
 
     try {
       final result = await methodChannel.invokeMethod<bool>('startCheckout', {
         'configurations': configurations,
       });
       return result ?? false;
-    } catch (e) {
-      print('Error starting checkout: $e');
+    } on PlatformException catch (e) {
+      debugPrint('checkout_flutter: could not start the checkout: ${e.code} ${e.message}');
       return false;
     }
   }
