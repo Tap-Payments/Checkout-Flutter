@@ -370,24 +370,58 @@ The plugin handles both modes the same way and fires the same callbacks. To capt
 
 Two apps live in [`example`](example). They run the same Dart code (the [`example/shared`](example/shared) package) and differ only in how iOS pulls in Checkout-IOS:
 
-| App | iOS integration | Run |
-|---|---|---|
-| [`example/spm_example`](example/spm_example) | Swift Package Manager | `cd example/spm_example && FLUTTER_SWIFT_PACKAGE_MANAGER=true flutter run` (or turn it on once with `flutter config --enable-swift-package-manager`) |
-| [`example/cocoapods_example`](example/cocoapods_example) | CocoaPods (`disable-swift-package-manager: true` in its `pubspec.yaml`) | `cd example/cocoapods_example && flutter run` |
+| App | iOS integration |
+|---|---|
+| [`example/spm_example`](example/spm_example) | Swift Package Manager |
+| [`example/cocoapods_example`](example/cocoapods_example) | CocoaPods (`disable-swift-package-manager: true` in its `pubspec.yaml`) |
 
 On Android both use Gradle and behave the same.
 
 The screens match the native example apps: a summary of what the next checkout will do, the main settings, and every callback as a card that expands to its full payload (long press copies it). **Settings** mirrors every input of the Tap web demo and has a **Show configuration JSON** view that prints the exact map passed to `startCheckout`.
 
-Before running, give the apps your Tap sandbox public key, either:
+### Add your keys
 
-- on the command line: `flutter run --dart-define=TAP_PUBLIC_KEY=pk_test_...`, or
-- in [`example/shared/lib/src/keys.dart`](example/shared/lib/src/keys.dart), replacing the placeholder `YOUR_TAP_PUBLIC_KEY`, or
-- in the app, under Settings > SDK Configuration > Public Key.
+The apps need a Tap sandbox public key (`pk_test_...`); keys are never committed. How to add one, or several to switch between, is in [Add your keys](example/README.md#add-your-keys) in the example README.
 
-To switch between several sandbox keys, copy [`example/shared/assets/keys.local.example.json`](example/shared/assets/keys.local.example.json) to `example/shared/assets/keys.local.json` (gitignored) and fill it in; debug builds then show **Saved Keys** in Settings.
+### Run the SPM example
 
-Both apps use the bundle id `com.example.checkoutFlutterExample` and the package name `com.example.checkout_flutter_example`; register them with Tap for your key, or change them to ones your key is registered for.
+Swift Package Manager must be turned on for the build. For a single run:
+
+```bash
+cd example/spm_example
+FLUTTER_SWIFT_PACKAGE_MANAGER=true flutter run --dart-define=TAP_PUBLIC_KEY=pk_test_...
+```
+
+Or turn it on once for your machine, after which a plain `flutter run` uses it:
+
+```bash
+flutter config --enable-swift-package-manager
+```
+
+On the first build Flutter adds the packages to the Xcode project, and Xcode downloads Checkout-IOS from GitHub.
+
+### Run the CocoaPods example
+
+```bash
+cd example/cocoapods_example
+flutter run --dart-define=TAP_PUBLIC_KEY=pk_test_...
+```
+
+It always uses CocoaPods, even when Swift Package Manager is turned on, and `flutter run` runs `pod install` for you. If CocoaPods cannot find the Checkout-IOS version, update the specs first:
+
+```bash
+cd example/cocoapods_example/ios && pod repo update && pod install
+```
+
+### Pick a device
+
+`flutter devices` lists simulators, emulators and phones; add `-d <id>` to choose one:
+
+```bash
+flutter run -d <device-id> --dart-define=TAP_PUBLIC_KEY=pk_test_...
+```
+
+Both apps share the same bundle id, so running one replaces the other on a device. Run the integration tests the same way; see [Tests](#tests).
 
 **Sandbox test card (3D Secure)**
 
@@ -403,6 +437,9 @@ Both apps use the bundle id `com.example.checkoutFlutterExample` and the package
 | [`android/src/test`](android/src/test) | The Android plugin: argument checks and the map handed to Checkout-Android. | `cd example/cocoapods_example/android && ./gradlew :checkout_flutter:testDebugUnitTest` |
 | [`example/shared/test`](example/shared/test) | The configuration the example apps send matches this README's defaults and mapping rules (same cases as the native `CheckoutSettingsTests`), plus the example screens. | `cd example/shared && flutter test` |
 | `example/*/integration_test` | On a simulator or emulator against the Tap sandbox: the README values give the expected callbacks (port of the native `ReadmeConfigurationTests`). | `cd example/spm_example && flutter test integration_test --dart-define=TAP_PUBLIC_KEY=pk_test_...` |
+
+> [!NOTE]
+> `flutter test integration_test` leaves the iOS project pointing at its temporary test entry point. Run `flutter run` (or `flutter build ios --config-only`) once before building the app from Xcode again.
 
 ## Upgrading from 1.0.4 or earlier
 
