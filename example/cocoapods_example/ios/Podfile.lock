@@ -1,0 +1,63 @@
+PODS:
+  - Checkout-IOS (1.0.7):
+    - SharedDataModels-iOS
+    - TapCardScannerWebWrapper-iOS
+    - TapFontKit-iOS
+    - TapSwiftEntryKit
+  - checkout_flutter (1.0.5):
+    - Checkout-IOS (= 1.0.7)
+    - Flutter
+  - Flutter (1.0.0)
+  - integration_test (0.0.1):
+    - Flutter
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - SharedDataModels-iOS (0.0.14)
+  - TapCardScannerWebWrapper-iOS (0.0.10):
+    - SharedDataModels-iOS (>= 0.0.14)
+    - TapCardVlidatorKit-iOS (>= 1.0.26)
+  - TapCardVlidatorKit-iOS (1.0.26)
+  - TapFontKit-iOS (0.0.12)
+  - TapSwiftEntryKit (2.0.2)
+
+DEPENDENCIES:
+  - checkout_flutter (from `.symlinks/plugins/checkout_flutter/ios`)
+  - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+
+SPEC REPOS:
+  trunk:
+    - Checkout-IOS
+    - SharedDataModels-iOS
+    - TapCardScannerWebWrapper-iOS
+    - TapCardVlidatorKit-iOS
+    - TapFontKit-iOS
+    - TapSwiftEntryKit
+
+EXTERNAL SOURCES:
+  checkout_flutter:
+    :path: ".symlinks/plugins/checkout_flutter/ios"
+  Flutter:
+    :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+
+SPEC CHECKSUMS:
+  Checkout-IOS: e26e488afcf47bc297846f544794bd67b8554b4c
+  checkout_flutter: 112e171b71ce5490f248328b324446e852152962
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  SharedDataModels-iOS: c01a406594091c60e59e2d6bbe9fd810ab9ec5e9
+  TapCardScannerWebWrapper-iOS: 0c41ce74e5b1889056a863b0aa81147abf4abd11
+  TapCardVlidatorKit-iOS: 5d2edb8881c1d8c55f57bd7691e2af7e3cc9d8a2
+  TapFontKit-iOS: c020790e9d7ef7b99fd9c1bd33f8c6fdc75b30c9
+  TapSwiftEntryKit: a3d866e56247953c6080e26f0263db8302d882c0
+
+PODFILE CHECKSUM: 5166bb26280628a234a38df9b2b4ad264bc4121c
+
+COCOAPODS: 1.16.2

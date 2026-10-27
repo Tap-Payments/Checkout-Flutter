@@ -26,11 +26,11 @@ abstract class CheckoutFlutterPlatform extends PlatformInterface {
   /// Start the checkout process with configurations and callbacks
   Future<bool> startCheckout({
     required Map<String, dynamic> configurations,
-    Function()? onClose,
     Function()? onReady,
-    Function(String)? onSuccess,
-    Function(String)? onError,
-    Function()? onCancel,
+    Function(String data)? onChargeCreated,
+    Function(String data)? onSuccess,
+    Function(String data)? onError,
+    Function()? onClose,
   }) {
     throw UnimplementedError('startCheckout() has not been implemented.');
   }

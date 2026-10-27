@@ -1,16 +1,22 @@
-# checkout_flutter_example
+# checkout_flutter examples
 
-Demonstrates how to use the checkout_flutter plugin.
+Two example apps that run the same Dart code and differ only in how iOS pulls in Checkout-IOS:
 
-## Getting Started
+| App | iOS integration |
+|---|---|
+| [`spm_example`](spm_example) | Swift Package Manager |
+| [`cocoapods_example`](cocoapods_example) | CocoaPods |
 
-This project is a starting point for a Flutter application.
+The screens, settings and unit tests live in [`shared`](shared) (`package:checkout_example`); each app's `lib/main.dart` only starts it.
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+cd spm_example
+FLUTTER_SWIFT_PACKAGE_MANAGER=true flutter run --dart-define=TAP_PUBLIC_KEY=pk_test_...
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+cd cocoapods_example
+flutter run --dart-define=TAP_PUBLIC_KEY=pk_test_...
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+See [Example apps](../README.md#example-apps) and [Tests](../README.md#tests) in the plugin README.

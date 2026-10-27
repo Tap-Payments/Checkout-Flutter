@@ -1,7 +1,7 @@
 name: checkout_flutter
 description: Accept a payment with one or multiple payment methods securely. Powered by Tap Payments.
-version: 1.0.4
-homepage:
+version: 1.0.5
+homepage: https://github.com/Tap-Payments/Checkout-Flutter
 
 environment:
   sdk: ^3.7.2

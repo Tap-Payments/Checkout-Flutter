@@ -1,3 +1,17 @@
+## 1.0.5 (2026-10-27)
+
+* iOS: Checkout-IOS 1.0.7. Needs iOS 15.0.
+* iOS: Swift Package Manager support (`ios/checkout_flutter/Package.swift`); CocoaPods still works.
+* Android: Checkout-Android 1.0.9; compileSdk 36.
+* New `onChargeCreated` callback on both platforms.
+* Android: closing the checkout calls `onClose`, like on iOS. `onCancel` is deprecated.
+* Android: the Checkout-Android keep rules ship with the plugin (`consumer-rules.pro`), so apps no longer copy them.
+* Android: callbacks that arrive after the checkout has finished (such as a late "Card loading timeout") are dropped.
+* Starting a checkout while one is open replaces it on both platforms.
+* iOS: amounts such as 0.1 reach the checkout as 0.1, not 0.10000000000000001.
+* New example apps (`example/cocoapods_example`, `example/spm_example`) with the same screens as the native examples, and tests.
+* The example apps use the UIScene life cycle, which apps built with Xcode 27 need to launch.
+
 ## 1.0.4 (2025-10-14)
 * Fix error parsing 
 ## 1.0.3 (2025-10-01)
